@@ -1,23 +1,18 @@
 import { useQuery } from '@apollo/client'
 import {BOOKS_QUERY} from "../queries.js";
-import {useMemo, useState} from "react";
+import {useState} from "react";
 
 export default function Books() {
-    const [selectedGenres, setSelectedGenres] = useState([])
-    const { loading, data: { allBooks } = { allBooks: [] } } = useQuery(BOOKS_QUERY)
+    const [selectedGenre, setSelectedGenre] = useState(null)
 
-    const allGenres = useMemo(() => {
-        return [...new Set(allBooks.map(b => b.genres).flat())]
-    }, [allBooks])
+    const { loading, data: { allBooks } = { allBooks: [] } } = useQuery(BOOKS_QUERY, {
+        variables: {...(selectedGenre ? { genre: selectedGenre } : {})}
+    })
 
-    const filteredBooks = selectedGenres.length === 0
-        ? allBooks
-        : allBooks.filter(b => b.genres.some(g => selectedGenres.includes(g)))
+    const [allGenres, setAllGenres] = useState([])
 
-    function handleGenreChange(genre, value) {
-        setSelectedGenres(!value
-            ? selectedGenres.filter(g => g !== genre)
-            : selectedGenres.concat(genre))
+    if (allGenres.length === 0 && selectedGenre === null && !loading && allBooks.length > 0) {
+        setAllGenres([...new Set(allBooks.map(b => b.genres).flat())])
     }
 
     if (loading) return <p>Loading...</p>
@@ -32,7 +27,7 @@ export default function Books() {
                     <th>author</th>
                     <th>published</th>
                 </tr>
-                {filteredBooks.map((a) => (
+                {allBooks.map((a) => (
                     <tr key={a.title}>
                         <td>{a.title}</td>
                         <td>{a.author.name}</td>
@@ -44,9 +39,9 @@ export default function Books() {
             <h2>genres</h2>
             <ul>
                 {allGenres.map((g) => {
-                    const selected = selectedGenres.includes(g)
+                    const selected = g === selectedGenre
                     return <li key={g}>{g}
-                        <input type="checkbox" checked={selected} onChange={() => handleGenreChange(g, !selected)}/>
+                        <input type="checkbox" checked={selected} onChange={() => setSelectedGenre(selected ? null : g)}/>
                     </li>
                 })}
             </ul>
