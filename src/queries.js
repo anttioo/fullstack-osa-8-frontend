@@ -11,10 +11,12 @@ export const AUTHORS_QUERY = gql`
 `
 
 export const BOOKS_QUERY = gql`
-    query {
-        allBooks {
+    query allBooks($author: String, $genre: String) {
+        allBooks(author: $author, genre: $genre) {
+            id
             title
             author {
+                id
                 name
             }
             published
