@@ -8,10 +8,23 @@ import Login from "./components/Login.jsx";
 import {useContext} from "react";
 import {AuthContext} from "./contexts/auth.jsx";
 import Recommended from "./components/Recommended.jsx";
+import {useSubscription} from "@apollo/client";
+import {BOOK_ADDED} from "./queries.js";
 
 export default function App() {
 
     const { logout, me } = useContext(AuthContext)
+
+    useSubscription(BOOK_ADDED, {
+        onData: ({ data }) => {
+            console.log("data", data)
+            const bookAdded = data.data.bookAdded
+            if (bookAdded) {
+                window.alert(`a book ${bookAdded.title} added`)
+            }
+        }
+    })
+
 
     return <div>
         <div style={{display: "flex", gap: "1rem"}}>
