@@ -1,10 +1,10 @@
-import { useQuery } from '@apollo/client'
+import {useQuery} from '@apollo/client'
 
-import {AUTHORS_QUERY} from "../queries.js";
+import {AUTHORS_QUERY,} from "../queries.js";
 
 export default function Authors() {
 
-    const { loading, data } = useQuery(AUTHORS_QUERY)
+    const {loading, data} = useQuery(AUTHORS_QUERY)
 
     const authors = data ? data.allAuthors : []
 
