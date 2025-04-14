@@ -3,8 +3,12 @@ import {useState} from 'react'
 import { useMutation } from '@apollo/client'
 
 import {ADD_BOOK, AUTHORS_QUERY, BOOKS_QUERY} from "../queries.js";
+import {useNavigate} from "react-router";
 
 export default function NewBook() {
+
+    let navigate = useNavigate();
+
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
     const [published, setPublished] = useState('')
@@ -37,6 +41,8 @@ export default function NewBook() {
         setAuthor('')
         setGenres([])
         setGenre('')
+
+        navigate("/books");
     }
 
     const addGenre = () => {

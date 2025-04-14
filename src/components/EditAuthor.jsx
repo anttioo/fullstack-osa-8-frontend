@@ -20,7 +20,9 @@ export default function EditAuthor() {
 
         if (selectedAuthor === "" || authors.find(a => a.name === selectedAuthor) === undefined) return
 
-        await editAuthor({variables: {name: selectedAuthor, born: newBorn}})
+        await editAuthor({
+            variables: {name: selectedAuthor, born: newBorn}
+        })
 
         setSelectedAuthor("")
         setNewBorn(0)
