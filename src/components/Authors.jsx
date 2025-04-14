@@ -19,8 +19,6 @@ export default function Authors() {
 
     if (loading) return <p>Loading...</p>
 
-    //if (!props.show) return null
-
     return (
         <div>
             <h2>authors</h2>
