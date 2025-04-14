@@ -18,7 +18,7 @@ export default function EditAuthor() {
     async function handleSubmit(event) {
         event.preventDefault()
 
-        if (selectedAuthor === "") return
+        if (selectedAuthor === "" || authors.find(a => a.name === selectedAuthor) === undefined) return
 
         await editAuthor({variables: {name: selectedAuthor, born: newBorn}})
 
