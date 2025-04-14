@@ -1,5 +1,9 @@
 import {useState} from 'react'
 
+import { useMutation } from '@apollo/client'
+
+import {ADD_BOOK, AUTHORS_QUERY, BOOKS_QUERY} from "../queries.js";
+
 export default function NewBook() {
     const [title, setTitle] = useState('')
     const [author, setAuthor] = useState('')
@@ -7,10 +11,26 @@ export default function NewBook() {
     const [genre, setGenre] = useState('')
     const [genres, setGenres] = useState([])
 
+    const [addBook] = useMutation(ADD_BOOK, {
+        refetchQueries: [
+            { query: AUTHORS_QUERY },
+            { query: BOOKS_QUERY },
+        ],
+    })
+
     const submit = async (event) => {
         event.preventDefault()
 
-        console.log('add book...')
+        const publishedInt = parseInt(published, 10)
+
+        if (isNaN(publishedInt)) {
+            console.error('published must be a number')
+            return
+        }
+
+        await addBook({
+            variables: { title, author, published: publishedInt, genres },
+        })
 
         setTitle('')
         setPublished('')

@@ -1,14 +1,5 @@
-import { gql, useQuery } from '@apollo/client'
-
-const BOOKS_QUERY = gql`
-    query {
-        allBooks {
-            title
-            author
-            published
-        }
-    }
-`
+import { useQuery } from '@apollo/client'
+import {BOOKS_QUERY} from "../queries.js";
 
 export default function Books() {
 
