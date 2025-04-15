@@ -18,15 +18,13 @@ export default function App() {
 
     useSubscription(BOOK_ADDED, {
         onData: ({data}) => {
-            console.log("data", data)
             const bookAdded = data.data.bookAdded
             if (bookAdded) {
                 window.alert(`a book ${bookAdded.title} added`)
-
-                client.cache.updateQuery({query: BOOKS_QUERY}, ({allBooks}) => {
-                    return {allBooks: allBooks.concat(bookAdded)}
-                })
-
+                client.cache.updateQuery(
+                    {query: BOOKS_QUERY},
+                    ({allBooks}) => ({allBooks: allBooks.concat(bookAdded)}),
+                )
             }
         }
     })

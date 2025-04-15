@@ -1,4 +1,4 @@
-import {ApolloClient, ApolloLink, HttpLink, InMemoryCache, split} from '@apollo/client'
+import {ApolloClient, ApolloLink, HttpLink, InMemoryCache, concat, split} from '@apollo/client'
 
 import { getMainDefinition } from '@apollo/client/utilities'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
@@ -25,12 +25,12 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 })
 
 const splitLink = split(
-    ({ query }) => {
+    ({query}) => {
         const mainDef = getMainDefinition(query)
         return mainDef.kind === 'OperationDefinition' && mainDef.operation === 'subscription'
     },
     wsLink,
-    authMiddleware.concat(httpLink)
+    concat(authMiddleware, httpLink)
 )
 
 export const client = new ApolloClient({
